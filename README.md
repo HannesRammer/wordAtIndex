@@ -18,7 +18,7 @@ Word At Index 0.0.1
 
 	* generation:
 
-	  -i,  Index for Word; fist word at index 0
+	  -i,  Index for Word; fist word at index 1
 	  -m,  Specify mask via Built-in charsets
 
 	       Example:

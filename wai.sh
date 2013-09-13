@@ -33,7 +33,7 @@ Usage: bash wai.sh -i index -m mask [customCharSet]
 
 * generation:
 
-  -i,  Index for Word; fist word at index 0
+  -i,  Index for Word; fist word at index 1
   -m,  Specify mask via Built-in charsets
 
        Example:
