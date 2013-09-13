@@ -1,3 +1,4 @@
+version="0.0.1"
 lSet=("a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z")
 uSet=("A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z")
 dSet=("0" "1" "2" "3" "4" "5" "6" "7" "8" "9")
@@ -11,12 +12,11 @@ mask=""
 maskLength=0
 wordLength=0
 wordSet=()
-
 index=0
 
 displayHelpMenu(){
 
-echo "wordAtIndex generator by Hannes Rammer,
+echo "WordAtIndex generator Version $version by Hannes Rammer ,
 Returns the word of a mask given its index.
 Purpose: split a mask for eg distributed computing [brute force]
 
@@ -24,7 +24,7 @@ pc1 -> mask[0-100000000]
 pc2 -> mask[100000001-200000000]
 ...
 
-Usage: sh wai.sh -i index -m mask [charset]
+Usage: bash wai.sh -i index -m mask [customCharSet]
 
 * Info:
 
@@ -38,20 +38,16 @@ Usage: sh wai.sh -i index -m mask [charset]
 
        Example:
        
-       sh wai.sh -i 13 -m ?d?d?d  
+       bash wai.sh -i 13 -m ?d?d
        
-       sets mask to length 3 with only digits
-
 * Custom charsets:
 
   -1, -2, -3, -4,  Specify custom charsets via Built-in charsets
 
        Example:
 
-       sh wai.sh -i 13 -m ?1?d?2 -1 ?dab -2 ?d
-
-       sets charset ?1 to 0123456789ab and ?2 to 0123456789
- 
+       bash wai.sh -i 13 -m ?1?d?1 -1 ?dabcDE  
+       
        IMPORTANT -1 ?d?l NOT EQUAL -1 ?l?d
 
 * Built-in charsets:
@@ -136,7 +132,7 @@ while getopts ":hi:m:v1:2:3:4:" optname
   do
 case "$optname" in
       "v")
-        echo "wordAtIndex Version 0.0.1"
+        echo "wordAtIndex Version $version"
         ;;
       "h")
         displayHelpMenu
