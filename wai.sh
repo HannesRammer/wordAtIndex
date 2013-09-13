@@ -16,9 +16,9 @@ index=0
 
 displayHelpMenu(){
 
-echo "wordAtIndex generator by sybian,
+echo "wordAtIndex generator by Hannes Rammer,
 Returns the word of a mask given its index.
-Purpose: split a mask for distributed computing [brute force]
+Purpose: split a mask for eg distributed computing [brute force]
 
 pc1 -> mask[0-100000000]
 pc2 -> mask[100000001-200000000]
