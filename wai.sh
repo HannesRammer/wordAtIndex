@@ -52,11 +52,11 @@ Usage: bash wai.sh -i index -m mask [customCharSet]
 
 * Built-in charsets:
 
-  ?l = abcdefghijklmnopqrstuvwxyz
-  ?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ
-  ?d = 0123456789
-  ?s =  !\"#\$%&'()*+,-./:;<=>?@[\\]^_\`{|}~
-
+  ?l = 'abcdefghijklmnopqrstuvwxyz'
+  ?u = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  ?d = '0123456789'
+  ?s = ' !\"#\$%&'()*+,-./:;<=>?@[\\]^_\`{|}~'
+  without surrounding ' '
 "
 }
 

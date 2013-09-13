@@ -37,9 +37,10 @@ Word At Index 0.0.1
 
 	* Built-in charsets:
 
-	  ?l = abcdefghijklmnopqrstuvwxyz
-	  ?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ
-	  ?d = 0123456789
-	  ?s =  !\"#\$%&'()*+,-./:;<=>?@[\\]^_\`{|}~
+	  ?l = 'abcdefghijklmnopqrstuvwxyz'
+	  ?u = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	  ?d = '0123456789'
+	  ?s = ' !\"#\$%&'()*+,-./:;<=>?@[\\]^_\`{|}~'
+		without surrounding ''
 
 ENJOY & BE NICE ;)
