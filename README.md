@@ -1,8 +1,7 @@
-Word At Index 0.0.1
+Word At Index 0.0.2
 ===================
 
-	WordAtIndex generator Version $version by Hannes Rammer ,
-	Returns the word of a mask given its index.
+  Returns the word of a mask given its index.
 	Purpose: split a mask for eg distributed computing [brute force]
 
 	pc1 -> mask[0-100000000]
@@ -10,9 +9,14 @@ Word At Index 0.0.1
 	...
 
 	Usage: bash wai.sh -i index -m mask [customCharSet]
+	eg.  
+		bash wai.sh -i1000000 -m?d?d?d?d?d?d?d?d
+	will output
+		'00999999'
+	surrounding '' are needed to make sure the space char wont be forgotten
 
 	* Info:
-
+	  -p,  to display the full output additional to the word at index -i
 	  -v,  Display version number
 	  -h,  Display this help menu
 
@@ -44,3 +48,8 @@ Word At Index 0.0.1
 		without surrounding ''
 
 ENJOY & BE NICE ;)
+
+changelog 0.0.2 - added -p option
+  WAI will now only return the word at index -i inside single quotes '' 
+	instead of the bulky output information which can be added via -p
+	this will hopefully enable easy pipelining	

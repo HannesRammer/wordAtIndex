@@ -1,4 +1,4 @@
-version="0.0.1"
+version="0.0.2"
 lSet=("a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z")
 uSet=("A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z")
 dSet=("0" "1" "2" "3" "4" "5" "6" "7" "8" "9")
@@ -16,52 +16,67 @@ index=0
 
 displayHelpMenu(){
 
-echo "WordAtIndex generator Version $version by Hannes Rammer ,
-Returns the word of a mask given its index.
-Purpose: split a mask for eg distributed computing [brute force]
+echo "Word At Index 0.0.2
+===================
 
-pc1 -> mask[0-100000000]
-pc2 -> mask[100000001-200000000]
-...
+  WordAtIndex generator Version $version by Hannes Rammer ,
+  Returns the word of a mask given its index.
+	Purpose: split a mask for eg distributed computing [brute force]
 
-Usage: bash wai.sh -i index -m mask [customCharSet]
+	pc1 -> mask[0-100000000]
+	pc2 -> mask[100000001-200000000]
+	...
 
-* Info:
+	Usage: bash wai.sh -i index -m mask [customCharSet]
+	eg.  
+		bash wai.sh -i1000000 -m?d?d?d?d?d?d?d?d
+	will output
+		'00999999'
+	surrounding '' are needed to make sure the space char wont be forgotten
 
-  -v,  Display version number
-  -h,  Display this help menu
+	* Info:
+	  -p,  to display the full output additional to the word at index -i
+	  -v,  Display version number
+	  -h,  Display this help menu
 
-* generation:
+	* generation:
 
-  -i,  Index for Word; fist word at index 1
-  -m,  Specify mask via Built-in charsets
+	  -i,  Index for Word; fist word at index 1
+	  -m,  Specify mask via Built-in charsets
 
-       Example:
-       
-       bash wai.sh -i 13 -m ?d?d
-       
-* Custom charsets:
+	       Example:
+	       
+	       bash wai.sh -i 13 -m ?d?d
+	       
+	* Custom charsets:
 
-  -1, -2, -3, -4,  Specify custom charsets via Built-in charsets
+	  -1, -2, -3, -4,  Specify custom charsets via Built-in charsets
 
-       Example:
+	       Example:
 
-       bash wai.sh -i 13 -m ?1?d?1 -1 ?dabcDE  
-       
-       IMPORTANT -1 ?d?l NOT EQUAL -1 ?l?d
+	       bash wai.sh -i 13 -m ?1?d?1 -1 ?dabcDE  
+	       
+	       IMPORTANT -1 ?d?l NOT EQUAL -1 ?l?d
 
-* Built-in charsets:
+	* Built-in charsets:
 
-  ?l = 'abcdefghijklmnopqrstuvwxyz'
-  ?u = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  ?d = '0123456789'
-  ?s = ' !\"#\$%&'()*+,-./:;<=>?@[\\]^_\`{|}~'
-  without surrounding ' '
+	  ?l = 'abcdefghijklmnopqrstuvwxyz'
+	  ?u = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	  ?d = '0123456789'
+	  ?s = ' !\"#\$%&'()*+,-./:;<=>?@[\\]^_\`{|}~'
+		without surrounding ''
+
+ENJOY & BE NICE ;)
+
+changelog 0.0.2 - added -p option
+  WAI will now only return the word at index -i inside single quotes '' 
+  instead of the bulky output information which can be added via -p
+	this will hopefully enable easy pipelining
 "
 }
-
+text=""
 setCustomSet(){
-  echo "*****set custom sets $1*****"
+  text=$test"*****set custom sets $1*****\n"
   setLength=${#OPTARG}
   
   for((i=0;i < $setLength;i++))
@@ -87,11 +102,11 @@ setCustomSet(){
       then
       set4=("${set4[@]}" "${!newCharSet}")
       fi
-      echo "added $newCharSet : '${!newCharSet}'"
+      text+="added $newCharSet : '${!newCharSet}'\n"
       
     else #if single char
     newCustomSet="set$optname[@]"
-    echo "char ${OPTARG:$i:1} "
+    text+="char ${OPTARG:$i:1}\n "
     if [ "$optname" == "1" ]
       then
         set1=("${set1[@]}" "${OPTARG:$i:1}")
@@ -105,12 +120,12 @@ setCustomSet(){
       then
         set4=("${set4[@]}" "${OPTARG:$i:1}")
       fi
-      echo "added '${OPTARG:$i:1}'"
+      text+="added '${OPTARG:$i:1}'\n"
     fi
     
   done
-  echo ""
-  echo "set$optname = ${!newCustomSet}"
+  text+="\n"
+  text+="set$optname = ${!newCustomSet}\n"
   #echo "*****end set custom sets*****"
         
 }
@@ -123,16 +138,19 @@ timeNeeded(){
   hours=$(expr $minutes / 60)
   days=$(expr $hours / 24)
   years=$(expr $days / 356)
-  echo "time for $combis words at ${keysPerSec}/s "
-  echo "$minutes mins or $hours hours or $days days or $years years"
-  echo ""
+  text+="time for $combis words at ${keysPerSec}/s \n"
+  text+="$minutes mins or $hours hours or $days days or $years years\n"
+  text+="\n"
 }
-
-while getopts ":hi:m:v1:2:3:4:" optname
+printText=0
+while getopts ":hi:m:v1:2:3:4:p" optname
   do
 case "$optname" in
+      "p")
+        printText=1
+        ;;
       "v")
-        echo "wordAtIndex Version $version"
+        text+="wordAtIndex Version $version\n"
         ;;
       "h")
         displayHelpMenu
@@ -141,12 +159,12 @@ case "$optname" in
         index=$OPTARG
         ;;
       "m")
-        echo "*****generate wordset*****"
-        echo ""
+        text+="*****generate wordset*****\n"
+        text+="\n"
         mask=$OPTARG
-        echo "Mask set to $OPTARG"
+        text+="Mask set to $OPTARG\n"
         maskLength=${#OPTARG}
-        echo "MaskLength set to $maskLength"
+        text+="MaskLength set to $maskLength\n"
         #echo ""
         for((i=0;i < $maskLength;i++))
         do
@@ -182,8 +200,8 @@ case "$optname" in
           fi
           #echo ""
         done
-        echo "WordLength is $wordLength"
-        echo "wordset = ${wordSet[@]}"
+        text+="WordLength is $wordLength\n"
+        text+="wordset = ${wordSet[@]}\n"
         #echo ""
         #echo "*****end generate wordset*****"
         ;;
@@ -211,9 +229,9 @@ case "$optname" in
         ;;
     esac
   done
-  echo "*****word generation*****"
-  echo "index $index"
-  echo "wordlength $wordLength"
+  text+="*****word generation*****\n"
+  text+="index $index\n"
+  text+="wordlength $wordLength\n"
       
   #get max combinations    
   combinations=0
@@ -233,14 +251,14 @@ case "$optname" in
   done
   if [ "$combinations" -lt "$index" ]  
   then
-  echo "**********************************************************"
-  echo "*index $index out of range max $combinations combinations*"
-  echo "**********************************************************"
+  text+="**********************************************************\n"
+  text+="*index $index out of range max $combinations combinations*\n"
+  text+="**********************************************************\n"
   else
-    echo ""
+    text+="\n"
     #echo "mask $mask"
     #echo "wordSet ${wordSet[@]}"
-    echo "combinations $combinations"
+    text+="combinations $combinations"
     
     timeNeeded 10000 $combinations
     timeNeeded 1000000000000 $combinations
@@ -274,14 +292,20 @@ case "$optname" in
       fi
     
     done
-    echo "$wordLength character word at index $index from max $combinations words"
-    echo "********************************************"
-    echo "*>>>>'$wordAtIndex'<<<<*"
-    echo "********************************************"
-    echo "without surrounding '' "
-    echo
+    text+="$wordLength character word at index $index from max $combinations words\n"
+    text+="********************************************\n"
+    text+="*>>>>'$wordAtIndex'<<<<*\n"
+    text+="********************************************\n"
+    text+="without surrounding '' \n"
+    text+="\n"
     
     
     #add split into array -s
     #add -t time stats ??
+  fi
+  if [ "$printText" == "1" ]
+  then
+    echo -e $text
+  else
+    echo "'$wordAtIndex'"
   fi
